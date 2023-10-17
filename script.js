@@ -143,6 +143,59 @@ const cars = [
   },
 ];
 
+const list = document.querySelector(".js-list");
 // *******Варіант-1******* \\
 
+// createMarkup(cars);
+
+// function createMarkup(arr) {
+//   const nodesArr = arr.map(({ id, model, type, price, img }) => {
+//     const liEl = document.createElement("li");
+//     const h2El = document.createElement("h2");
+//     const h3El = document.createElement("h3");
+//     const spanEl = document.createElement("span");
+//     const imgEl = document.createElement("img");
+
+//     liEl.dataset.id = id;
+//     h2El.textContent = model;
+//     h3El.textContent = type;
+//     spanEl.textContent = price;
+
+//     imgEl.src = img;
+//     imgEl.alt = `${model} ${type}`;
+//     imgEl.style.width = "300px";
+
+//     liEl.append(h2El, imgEl, h3El, spanEl);
+//     return liEl;
+//   });
+
+//   console.log(nodesArr);
+//   list.append(...nodesArr);
+// }
+
 // *******Варіант-2******* \\
+
+createMarkup(cars);
+
+function createMarkup(arr) {
+        const markup = arr
+    .map(
+      ({ id, model, type, price, img }) => `
+      <li data-id="${id}">
+        <h2>${model}</h2>
+        <img
+          src="${img}"
+          alt="${model} ${type}"
+          style="width: 300px"
+        />
+        <h3>${type}</h3>
+        <span>${price}</span>
+      </li>
+  `
+    )
+       .join("");
+
+  console.log(markup);
+
+  list.insertAdjacentHTML("beforeend", markup);
+}
