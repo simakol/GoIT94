@@ -1,0 +1,9 @@
+.list {
+  list-style: none;
+  background-color: #000;
+  color: lime;
+}
+
+button {
+  font-size: 50px;
+}
