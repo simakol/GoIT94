@@ -154,3 +154,47 @@ const cars = [
     img: "https://www.volvocars.com/media/shared-assets/master/images/pages/my19/xc60-my19/accessories/xc60my19_accessories_exteriorfeature2_1.jpg?w=320",
   },
 ];
+
+const list = document.querySelector(".js-list");
+const form = document.querySelector(".js-form");
+
+list.insertAdjacentHTML("beforeend", createMarkup(cars)); // відмалювали розмітку усіх машин
+form.addEventListener("submit", handleSubmit); // повісили обробник подій по сабміту на форму
+
+function handleSubmit(event) {
+  event.preventDefault(); // відключили перезавантаження сторінки
+
+  const { query, options } = event.currentTarget.elements; // витягнули з форми елементи форм (інпут і селект)
+
+  // const {
+  //   elements: { query, options },
+  // } = event.currentTarget; // витягнули з форми елементи форм (інпут і селект)
+  console.log(query.value, options.value);
+
+  const result = cars.filter(
+    (car) =>
+      query.value.toLowerCase().trim() === car[options.value].toLowerCase()
+  ); // car["type"] ||  car["car"] -> car.type || car.car
+  // фільтруємо масив з обʼєктами машин, і залишаємо тільки ті, які підходять під пошук, тобто ті, у яких марка або модель співпадає з тим, що ми написали в інпут (порівняння відбувається в залежності від того, що вибере користува, або car або type)
+
+  list.innerHTML = createMarkup(result); // стираємо всі машини залишаючи тільки ті, які підходять під умову пошуку
+}
+
+function createMarkup(arr) {
+  return arr
+    .map(
+      ({ id, car, type, price, img }) => `
+      <li data-id="${id}" class="car-card">
+        <h2 class="car-title">${car}</h2>
+        <img
+          src="${img}"
+          alt="${car} ${type}"
+          class="car-image"
+        />
+        <h3 class="car-type">${type}</h3>
+        <span class="car-price">${price}</span>
+      </li>
+  `
+    )
+    .join("");
+}
