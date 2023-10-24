@@ -148,3 +148,44 @@ const products = [
       "10-дюймовий планшет з високою продуктивністю та Retina дисплеєм.",
   },
 ];
+
+const list = document.querySelector(".js-products");
+
+list.insertAdjacentHTML("beforeend", createMarkup(products));
+list.addEventListener("click", handleClick);
+
+function handleClick(event) {
+  if (event.target === event.currentTarget) {
+    // раннє повернення, не будемо оброблювати подію, якщо ми клінули по батьківському контейнеру
+    return;
+  }
+  const currentProduct = event.target.closest(".js-product-item");
+  const currentProductId = Number(currentProduct.dataset.id);
+  const product = products.find(({ id }) => id === currentProductId);
+  console.log(product);
+
+  const instance = basicLightbox.create(`
+  <div class="modal">
+    <img src="${product.img}" alt="${product.name}"/>
+    <h2>${product.name}</h2>
+    <p>Ціна: ${product.price} грн</p>
+    <p>${product.description}</p>
+  </div>
+  `);
+
+  instance.show();
+}
+
+function createMarkup(arr) {
+  return arr
+    .map(
+      ({ id, img, name, price }) => `
+  <li data-id="${id}" class="item js-product-item">
+    <img src="${img}" alt="${name}" width="300"/>
+    <h2>${name}</h2>
+    <p>Ціна: ${price} грн</p>
+  </li>
+`
+    )
+    .join("");
+}
