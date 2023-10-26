@@ -88,7 +88,28 @@
 // Для виводу модального вікна застосуй бібліотеку basiclightbox
 // Після визначення переможця обов'язково підготуй ігрове поле для наступної гри
 
-const combination = [
+/*
+1. отримаємо рефси
+2. створюємо масиви історій для гравця Х і О + створюємо змінну для поточного гравця
+3. намалюємо поле з 9 клітинок (+ додати дата айді)
+4. вішаємо слухача подій на контейнер
+  4.1. Робимо перевірку чи зайнята клітика або що ми клікнули саме на клітинку(що не клікнули по полю). Якщо промазали або клітинка зайнята - вийти з функції обробника подій.
+  4.2. Визначити з яким гравцем я взаємодію + створити змінну isWinner = false
+  Якщо Х:
+    4.2.1. пушимо айді клітинки в масив історії ходів для Х
+    4.2.2. якщо довжина масиву історії Х >= 3, то робимо перевірку на переможця. (Переможець визначається якщо масив історій містить переможну комбінацію) якщо виграли isWinner = true
+  Якщо О: 
+    4.2.3. пушимо айді клітинки в масив історії ходів для О
+    4.2.4. якщо довжина масиву історії О >= 3, то робимо перевірку на переможця. (Переможець визначається якщо масив історій містить переможну комбінацію) якщо виграли isWinner = true
+  4.3. якщо isWinner === true - то виводимо модальне вікно з переможцем і закінчуємо гру, очистивши всі поля(очистити масиви історії)
+  4.4. якщо isWinner === false і сума довжин історій двох гравців === 9 то показуємо нічию і закінчуємо гру
+  4.5. показуємо текст контект клітики і змінюємо гравця на іншого (якщо був Х то наступний О, і навпаки)
+
+*/
+
+const content = document.getElementById("content");
+
+const combinations = [
   [1, 2, 3],
   [4, 5, 6],
   [7, 8, 9],
@@ -98,3 +119,81 @@ const combination = [
   [3, 5, 7],
   [3, 6, 9],
 ];
+
+const historyX = [];
+const historyO = [];
+
+let currentPlayer = "X";
+
+content.innerHTML = createMarkup();
+
+content.addEventListener("click", handleClick);
+
+function handleClick(event) {
+  if (event.target === event.currentTarget || event.target.textContent) {
+    return;
+  }
+
+  let isWinner = false;
+  const id = Number(event.target.dataset.id);
+
+  if (currentPlayer === "X") {
+    historyX.push(id);
+    isWinner = historyX.length >= 3 ? checkWinner(historyX) : false;
+  } else {
+    historyO.push(id);
+    isWinner = historyO.length >= 3 ? checkWinner(historyO) : false;
+  }
+
+  event.target.textContent = currentPlayer;
+
+  if (isWinner) {
+    const instance = basicLightbox.create(`
+    <div class="box">
+        <h1>Player ${currentPlayer} is winner!</h1>
+    </div>
+    `);
+
+    instance.show();
+    resetGame();
+    return;
+  }
+
+  if (!isWinner && historyX.length + historyO.length === 9) {
+    const instance = basicLightbox.create(`
+    <div class="box">
+        <h1>Tie!</h1>
+    </div>
+    `);
+
+    instance.show();
+    resetGame();
+    return;
+  }
+
+  currentPlayer = currentPlayer === "X" ? "O" : "X";
+}
+
+function checkWinner(history) {
+  // перевірка на те що в масиві комбінацій є ХОЧА Б одна комбінація УСІ айді якої є в нашій історії
+  return combinations.some((combination) =>
+    combination.every((id) => history.includes(id))
+  );
+}
+
+function resetGame() {
+  content.innerHTML = createMarkup();
+  currentPlayer = "X";
+  historyX.splice(0);
+  historyO.splice(0);
+}
+
+function createMarkup() {
+  let markup = "";
+
+  for (let i = 1; i <= 9; i += 1) {
+    markup += `<div data-id="${i}" class="item"></div>`;
+  }
+
+  return markup;
+}
