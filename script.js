@@ -122,6 +122,7 @@ const arrDay = [
   "П`ятниця",
   "Субота",
 ];
+
 const namesOfMonth = [
   "Січень",
   "Лютий",
@@ -136,3 +137,39 @@ const namesOfMonth = [
   "Листопад",
   "Грудень",
 ];
+
+countDate();
+
+setInterval(countDate, 1000);
+
+function countDate() {
+  const currentDate = new Date();
+
+  // електронний годинник
+  const day = currentDate.getDay();
+  const date = currentDate.getDate();
+  const month = currentDate.getMonth();
+  const year = currentDate.getFullYear();
+  const localTime = currentDate.toLocaleTimeString("uk-UA");
+
+  refs.day.textContent = arrDay[day];
+  refs.date.textContent = date;
+  refs.month.textContent = namesOfMonth[month];
+  refs.year.textContent = year;
+  refs.clock.textContent = `Поточний час: ${localTime}`;
+
+  // механічний годинник
+
+  const seconds = currentDate.getSeconds();
+  const minutes = currentDate.getMinutes();
+  const hours = currentDate.getHours();
+
+  const secDeg = (360 / 60) * seconds;
+  const minDeg = (360 / 60) * minutes;
+  const hourDeg = (360 / 12) * hours + minutes / 2;
+  // const hourDeg = (360 / 12) * hours + (360 / 12 / 60) * minutes ;
+
+  refs.seconds.style.transform = `rotate(${secDeg}deg)`;
+  refs.minutes.style.transform = `rotate(${minDeg}deg)`;
+  refs.hours.style.transform = `rotate(${hourDeg}deg)`;
+}
