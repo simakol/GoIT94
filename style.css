@@ -12,6 +12,7 @@ body {
   background-image: url(https://i.ibb.co/Wt6q4QP/1-y-X7-Vd1-G1wi9-F0vth-LEh-AA.jpg);
   background-size: cover;
   background-repeat: no-repeat;
+  height: 100vh;
 }
 .clock {
   width: 550px;
