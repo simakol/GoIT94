@@ -4,6 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>GoIT94</title>
+    <link
+      href="
+https://cdn.jsdelivr.net/npm/notiflix@3.2.6/dist/notiflix-3.2.6.min.css
+"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
@@ -17,15 +23,21 @@
         <label for="days" class="label">Виберіть кількість днів:</label>
         <div class="input-group">
           <select name="days" class="days-select">
+            <option value="1">1</option>
+            <option value="2">2</option>
             <option value="3">3</option>
-            <option value="5">5</option>
-            <option value="7">7</option>
           </select>
           <button class="search-button">Пошук</button>
         </div>
       </div>
     </form>
+
+    <h1 class="js-city-name"></h1>
     <ul class="js-list weather-cards"></ul>
+
+    <script src="
+https://cdn.jsdelivr.net/npm/notiflix@3.2.6/dist/notiflix-aio-3.2.6.min.js
+"></script>
     <script src="script.js"></script>
   </body>
 </html>
