@@ -261,6 +261,7 @@ async function handleSubmitCountries(event) {
     console.log(err);
   } finally {
     event.target.reset();
+    refs.formContainer.innerHTML = '<input type="text" name="country" />';
   }
 }
 
